@@ -1,0 +1,22 @@
+{
+  "name": "crm",
+  "version": "1.0.0",
+  "description": "CRM Built With Node",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon ./index.js --exec babel-node"
+  },
+  "author": "Michael Adetona",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "mongoose": "^8.4.1",
+    "nodemon": "^3.1.2"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.24.6",
+    "@babel/core": "^7.24.6",
+    "@babel/node": "^7.24.6",
+    "@babel/preset-env": "^7.24.6"
+  }
+}
