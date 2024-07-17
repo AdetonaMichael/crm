@@ -1,18 +1,33 @@
 import express from 'express';
 import routes from './src/routes/crmRoutes';
-import mongoose, { mongo } from 'mongoose';
+import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
+import jsonwebtoken from 'jsonwebtoken';
 
-const PORT = 3001;
+require('dotenv').config();
+
+const PORT = process.env.PORT || 3002;
 const app = express();
 
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/CRMdb',{
-    useNewUrlParser:true
-});
+mongoose.connect(process.env.DB_URL).then(()=>console.log('Connected to Mongodb'))
+  .catch(()=>console.log('Could not Connect to Mongodb'));
 
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
+
+app.use((req, res, next)=>{
+    if(req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0]==='JWT'){
+        jsonwebtoken.verify(req.headers.authorization.split(' ')[1], 'RESTFULAPIs', (err, decode)=>{
+            if(err) req.user = undefined;
+            req.user = decode;
+            next();
+        })
+    }else{
+        req.user = undefined;
+        next();
+    }
+});
 
 app.use(express.static('public'));
 
